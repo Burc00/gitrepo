@@ -1,0 +1,76 @@
+import tkinter as tk
+
+calculation = ""
+
+def add_to_calculation(symbol):
+    global calculation
+    calculation += str(symbol)
+    text_result.delete(1.0, "end")
+    text_result.insert(1.0, calculation)
+
+def evaluate_calculation():
+    global calculation
+    try:
+        calculation = str(eval(calculation))
+        text_result.delete(1.0, "end")  # Clear the display
+        text_result.insert(1.0, calculation)  # Show the result
+    except:
+        clear_field()
+        text_result.insert(1.0, "Error")
+
+def clear_field():
+    global calculation
+    calculation = ""
+    text_result.delete(1.0, "end")
+
+# Initialize root window
+root = tk.Tk()
+root.geometry("400x600")
+root.title("iPhone Style Calculator")
+root.configure(bg="black")
+
+# Display for calculation
+text_result = tk.Text(root, height=2, width=20, font=("Helvetica", 32), bg="black", fg="white", bd=0)
+text_result.grid(row=0, column=0, columnspan=4, padx=10, pady=20)
+
+# Define button style
+button_font = ("Helvetica", 24)
+button_bg_color = "#333333"
+button_fg_color = "white"
+button_active_bg = "#4d4d4d"
+
+# Function to create buttons 
+def create_button(text, row, col, width=5, height=2, bg=button_bg_color, fg=button_fg_color, command=None):
+    return tk.Button(
+        root, text=text, command=command, width=width, height=height, 
+        font=button_font, bg=bg, fg=fg, bd=0, activebackground=button_active_bg
+    ).grid(row=row, column=col, padx=5, pady=5)
+
+# Create buttons for digits
+create_button("0", 5, 1, width=5, command=lambda: add_to_calculation(0), bg="gray")
+create_button("1", 4, 0, command=lambda: add_to_calculation(1), bg="gray")
+create_button("2", 4, 1, command=lambda: add_to_calculation(2), bg="gray")
+create_button("3", 4, 2, command=lambda: add_to_calculation(3), bg="gray")
+create_button("4", 3, 0, command=lambda: add_to_calculation(4), bg="gray")
+create_button("5", 3, 1, command=lambda: add_to_calculation(5), bg="gray")
+create_button("6", 3, 2, command=lambda: add_to_calculation(6), bg="gray")
+create_button("7", 2, 0, command=lambda: add_to_calculation(7), bg="gray")
+create_button("8", 2, 1, command=lambda: add_to_calculation(8), bg="gray")
+create_button("9", 2, 2, command=lambda: add_to_calculation(9), bg="gray")
+
+# Create operator buttons
+create_button("+", 4, 3, bg="orange", command=lambda: add_to_calculation("+"))
+create_button("-", 3, 3, bg="orange", command=lambda: add_to_calculation("-"))
+create_button("*", 2, 3, bg="orange", command=lambda: add_to_calculation("*"))
+create_button("/", 1, 3, bg="orange", command=lambda: add_to_calculation("/"))
+create_button("=", 5, 3, bg="orange", command=evaluate_calculation)
+
+# Clear button
+create_button("C", 1, 0, bg="gray", command=clear_field)
+
+# Additional buttons
+create_button(".", 5, 2, bg="gray", command=lambda: add_to_calculation("."))
+create_button("%", 1, 1, bg="gray", command=lambda: add_to_calculation("%"))
+create_button("+/-", 1, 2, bg="gray", command=lambda: add_to_calculation("-"))
+
+root.mainloop()
